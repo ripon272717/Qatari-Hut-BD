@@ -1,4 +1,4 @@
-const backendDomin = "http://localhost:8080"
+const backendDomin = "http://localhost:8800"
 
 const SummaryApi = {
     signUP : {
