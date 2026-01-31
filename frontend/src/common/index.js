@@ -1,4 +1,4 @@
-const backendDomin = "http://localhost:8800"
+const backendDomin = "https://qatari-hut-bd.onrender.com"
 
 const SummaryApi = {
     signUP : {
