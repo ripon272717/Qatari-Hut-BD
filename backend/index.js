@@ -13,10 +13,15 @@ app.use(cors({
     credentials: true
 }));
 
-app.use(express.json());
+/** * ছবির ডেটা সাধারণত বড় হয়, তাই লিমিট বাড়িয়ে ৫MB বা ১০MB করতে হবে।
+ * এটি না করলে প্রোফাইল পিকচার সেভ হবে না।
+ */
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
 app.use(cookieParser());
 
-// এপিআই রুট কানেক্ট করা (অবশ্যই express.json() এর নিচে হবে)
+// এপিআই রুট কানেক্ট করা
 app.use("/api", router); 
 
 const PORT = process.env.PORT || 8800;
@@ -24,7 +29,7 @@ const PORT = process.env.PORT || 8800;
 connectDB().then(() => {
     app.listen(PORT, () => {
         console.log("Connected to MongoDB Database");
-        console.log("Server is running on " + PORT);
+        console.log("Server is running on port " + PORT);
     });
 }).catch((err) => {
     console.log("MongoDB connection error:", err);

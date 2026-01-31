@@ -1,40 +1,43 @@
 const userModel = require("../../models/userModel")
+const bcrypt = require('bcryptjs')
 
-async function updateUser(req,res){
-    try{
-        const sessionUser = req.userId
+async function updateUser(req, res) {
+    try {
+        const sessionUser = req.userId // মিডলওয়্যার থেকে পাওয়া ইউজার আইডি
+        const { email, name, mobile, username, profilePic, password } = req.body
 
-        const { userId , email, name, role} = req.body
-
+        // ডাটাবেসে আপডেট করার জন্য অবজেক্ট তৈরি
         const payload = {
-            ...( email && { email : email}),
-            ...( name && { name : name}),
-            ...( role && { role : role}),
+            ...(name && { name : name }),
+            ...(username && { username : username }),
+            ...(mobile && { mobile : mobile }),
+            ...(profilePic && { profilePic : profilePic }),
         }
 
-        const user = await userModel.findById(sessionUser)
+        // যদি ইউজার নতুন পাসওয়ার্ড দেয়, তবে সেটি হ্যাশ (Hash) করে সেভ করতে হবে
+        if (password) {
+            const salt = bcrypt.genSaltSync(10);
+            const hashPassword = await bcrypt.hashSync(password, salt);
+            payload.password = hashPassword
+        }
 
-        console.log("user.role",user.role)
+        // ডাটাবেস আপডেট কমান্ড
+        const updatedUser = await userModel.findByIdAndUpdate(sessionUser, payload, { new: true })
 
-
-
-        const updateUser = await userModel.findByIdAndUpdate(userId,payload)
-
-        
         res.json({
-            data : updateUser,
-            message : "User Updated",
-            success : true,
-            error : false
+            data: updatedUser,
+            message: "প্রোফাইল সফলভাবে আপডেট হয়েছে!",
+            success: true,
+            error: false
         })
-    }catch(err){
+
+    } catch (err) {
         res.status(400).json({
-            message : err.message || err,
-            error : true,
-            success : false
+            message: err.message || err,
+            error: true,
+            success: false
         })
     }
 }
-
 
 module.exports = updateUser

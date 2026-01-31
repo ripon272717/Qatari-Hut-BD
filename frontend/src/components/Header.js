@@ -27,24 +27,17 @@ const Header = () => {
             method: SummaryApi.logout_user.method,
             credentials: 'include'
         })
-
         const data = await fetchData.json()
-
         if (data.success) {
             toast.success(data.message)
             dispatch(setUserDetails(null))
             navigate("/")
-        }
-
-        if (data.error) {
-            toast.error(data.message)
         }
     }
 
     const handleSearch = (e) => {
         const { value } = e.target
         setSearch(value)
-
         if (value) {
             navigate(`/search?q=${value}`)
         } else {
@@ -53,7 +46,7 @@ const Header = () => {
     }
 
     return (
-        <header className='h-16 shadow-md bg-white fixed w-full z-40'>
+        <header className='h-20 shadow-md bg-white fixed w-full z-40'>
             <div className='h-full container mx-auto flex items-center px-4 justify-between'>
                 <div>
                     <Link to={"/"}>
@@ -69,44 +62,44 @@ const Header = () => {
                 </div>
 
                 <div className='flex items-center gap-7'>
-
-                    {/* প্রোফাইল এবং ইউজারনেম সেকশন */}
                     <div className='relative flex flex-col items-center justify-center'>
                         {
                             user?._id && (
                                 <div className='flex flex-col items-center'>
-                                    <div className='text-3xl cursor-pointer relative flex justify-center' onClick={() => setMenuDisplay(preve => !preve)}>
+                                    {/* প্রোফাইল পিকচার বড় করা হয়েছে (w-12 h-12) */}
+                                    <div className='w-12 h-12 cursor-pointer relative flex justify-center border rounded-full overflow-hidden shadow-sm' onClick={() => setMenuDisplay(preve => !preve)}>
                                         {
                                             user?.profilePic ? (
-                                                <img src={user?.profilePic} className='w-10 h-10 rounded-full object-cover border' alt={user?.name} />
+                                                <img src={user?.profilePic} className='w-full h-full object-cover' alt={user?.name} />
                                             ) : (
-                                                <FaRegCircleUser />
+                                                <div className='text-4xl'><FaRegCircleUser /></div>
                                             )
                                         }
                                     </div>
-                                    {/* প্রোফাইল পিকচারের নিচে ইউজারনেম */}
-                                    <p className='text-[11px] font-bold text-slate-700 mt-0.5 capitalize'>{user?.username || user?.name}</p>
+                                    <p className='text-[12px] font-bold text-slate-700 mt-1 capitalize'>{user?.username || user?.name}</p>
                                 </div>
                             )
                         }
 
                         {
                             menuDisplay && (
-                                <div className='absolute bg-white top-14 p-2 shadow-lg rounded min-w-[120px] z-50 border'>
+                                <div className='absolute bg-white top-16 p-2 shadow-lg rounded min-w-[150px] z-50 border'>
                                     <nav className='flex flex-col'>
+                                        {/* এডিট প্রোফাইল অপশন */}
+                                        <Link to={"/user-details"} className='whitespace-nowrap hover:bg-slate-100 p-2 text-sm' onClick={() => setMenuDisplay(false)}>Edit Profile</Link>
+                                        
                                         {
                                             user?.role === ROLE.ADMIN && (
                                                 <Link to={"/admin-panel/all-products"} className='whitespace-nowrap hover:bg-slate-100 p-2 text-sm' onClick={() => setMenuDisplay(false)}>Admin Panel</Link>
                                             )
                                         }
-                                        <button onClick={handleLogout} className='md:hidden block text-left hover:bg-slate-100 p-2 text-sm text-red-600 font-semibold'>Logout</button>
+                                        <button onClick={handleLogout} className='block text-left hover:bg-slate-100 p-2 text-sm text-red-600 font-semibold'>Logout</button>
                                     </nav>
                                 </div>
                             )
                         }
                     </div>
 
-                    {/* কার্ট সেকশন */}
                     {
                         user?._id && (
                             <Link to={"/cart"} className='text-2xl relative'>
@@ -118,17 +111,13 @@ const Header = () => {
                         )
                     }
 
-                    {/* লগইন/লগআউট বাটন */}
                     <div className='hidden md:block'>
                         {
-                            user?._id ? (
-                                <button onClick={handleLogout} className='px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700 transition-all'>Logout</button>
-                            ) : (
+                            !user?._id && (
                                 <Link to={"/login"} className='px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700 transition-all'>Login</Link>
                             )
                         }
                     </div>
-
                 </div>
             </div>
         </header>

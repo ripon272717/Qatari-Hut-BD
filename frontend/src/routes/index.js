@@ -11,6 +11,7 @@ import CategoryProduct from '../pages/CategoryProduct'
 import ProductDetails from '../pages/ProductDetails'
 import Cart from '../pages/Cart'
 import SearchProduct from '../pages/SearchProduct'
+import UserEditProfile from '../pages/UserEditProfile' // এই যে নতুন ফাইলটি ইম্পোর্ট করলাম
 
 const router = createBrowserRouter([
     {
@@ -42,12 +43,16 @@ const router = createBrowserRouter([
                 element : <ProductDetails/>
             },
             {
-                path : 'cart',
+                path : "cart",
                 element : <Cart/>
             },
             {
                 path : "search",
                 element : <SearchProduct/>
+            },
+            {
+                path : "user-details", // এই রাউটে ক্লিক করলে প্রোফাইল এডিট পেজ আসবে
+                element : <UserEditProfile/>
             },
             {
                 path : "admin-panel",
