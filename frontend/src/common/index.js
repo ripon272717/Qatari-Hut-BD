@@ -1,7 +1,7 @@
-const backendDomin = "https://qatari-hut-bd.onrender.com"
+const backendDomin = "http://localhost:8800"; 
 
 const SummaryApi = {
-    signUP : {
+    signUp : {
         url : `${backendDomin}/api/signup`,
         method : "post"
     },
@@ -79,5 +79,4 @@ const SummaryApi = {
     }
 }
 
-
-export default SummaryApi
+export default SummaryApi;
